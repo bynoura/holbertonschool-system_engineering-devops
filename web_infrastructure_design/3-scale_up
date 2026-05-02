@@ -1,0 +1,58 @@
+3. Scale Up Web Infrastructure
+
+User (Browser)
+     |
+     | HTTPS request
+     v
+www.foobar.com
+     |
+     | DNS (A record → Load Balancer IP)
+     v
+Load Balancer Cluster (HAproxy 1 + HAproxy 2)
+     |
+     |---------------------------|
+     |                           |
+     v                           v
+Firewall                     Firewall
+     |                           |
+     v                           v
+Web Server (Nginx)        Application Server
+(Server 1)                (Server 2)
+     |                           |
+     v                           v
+Database Server (MySQL Primary + Replica)
+(Server 3)
+
+
+Explanation:
+
+Why add more servers and split components?
+To improve scalability, performance, and maintainability by separating services across different servers.
+
+Why add a second load balancer (cluster)?
+To avoid a single point of failure and ensure high availability. If one load balancer fails, the other continues handling traffic.
+
+What is a load balancer cluster?
+It is a setup where two load balancers work together in Active-Active or Active-Passive mode to distribute traffic and provide redundancy.
+
+Why split web server, application server, and database?
+To improve performance and allow each component to scale independently.
+
+- Web Server: handles HTTP requests and static content
+- Application Server: handles business logic
+- Database Server: stores and manages data
+
+Why is this better than previous architecture?
+Because it improves:
+- Scalability
+- Reliability
+- Fault tolerance
+- Performance
+
+System Redundancy:
+Each critical component has backup or multiple instances to avoid downtime.
+
+Issues solved:
+- Reduced SPOF
+- Better traffic handling
+- Improved system stability
