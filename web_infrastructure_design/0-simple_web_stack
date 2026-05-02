@@ -1,0 +1,42 @@
+User (Browser)
+     |
+     | HTTP/HTTPS request
+     v
+www.foobar.com
+     |
+     | DNS (A record → 8.8.8.8)
+     v
+Server (8.8.8.8)
+ ├── Web Server (Nginx)
+ ├── Application Server
+ ├── Application Files (Code Base)
+ └── Database (MySQL)
+
+
+Explanation:
+
+What is a server?
+A server is a machine that provides services to clients.
+
+What is the role of the domain name?
+It translates the domain name into an IP address.
+
+What type of DNS record is www?
+It is an A record.
+
+What is the role of the web server?
+Handles HTTP requests and serves content.
+
+What is the role of the application server?
+Processes logic and dynamic content.
+
+What is the role of the database?
+Stores and manages data.
+
+How does the server communicate with the user?
+Using HTTP/HTTPS over TCP/IP.
+
+Issues:
+- SPOF
+- Downtime during maintenance
+- Cannot scale
