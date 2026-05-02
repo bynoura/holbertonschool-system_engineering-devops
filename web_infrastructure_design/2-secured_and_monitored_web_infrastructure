@@ -1,0 +1,65 @@
+2. Secured and Monitored Web Infrastructure
+
+User (Browser)
+     |
+     | HTTPS request (encrypted traffic)
+     v
+www.foobar.com
+     |
+     | DNS (A record → 8.8.8.8)
+     v
+Load Balancer (HAproxy + SSL Certificate)
+     |
+     |---------------------|
+     v                     v
+Firewall 1            Firewall 2
+     |                     |
+     v                     v
+Server 1              Server 2              Server 3
+(Nginx)               (Nginx)               (Nginx)
+(App Server)          (App Server)          (App Server)
+(Code Base)           (Code Base)           (Code Base)
+(MySQL Primary)       (MySQL Replica)       (MySQL Replica)
+     |
+     v
+Firewall 3
+     |
+     v
+Monitoring Clients (Sumologic / monitoring agent on each server)
+
+
+Explanation:
+
+Why add firewalls?
+Firewalls are used to control incoming and outgoing network traffic and protect the infrastructure from unauthorized access and attacks.
+
+Why use HTTPS?
+HTTPS encrypts the communication between the user and the website using SSL/TLS, ensuring data privacy and security.
+
+Why add SSL certificate?
+The SSL certificate is used to enable HTTPS and encrypt traffic between clients and the load balancer.
+
+Why add monitoring clients?
+Monitoring clients collect system data (CPU usage, memory, requests, errors) from each server to track performance and detect failures.
+
+What is monitoring used for?
+Monitoring is used to track system health, detect issues, and ensure availability and performance of the infrastructure.
+
+How does monitoring collect data?
+Each server runs a monitoring agent that sends logs and metrics to a monitoring service (like Sumologic).
+
+How to monitor QPS (Queries Per Second)?
+You configure the monitoring system to track the number of requests per second handled by the web server or load balancer.
+
+---
+
+Issues with this infrastructure:
+
+1. SSL termination at Load Balancer:
+If SSL is terminated at the load balancer, traffic between the load balancer and backend servers is not encrypted, which is a security risk.
+
+2. Single MySQL write server:
+Only one database (Primary) handles writes, which creates a bottleneck and risk of failure.
+
+3. Same components on all servers:
+All servers having web, app, and database components leads to poor separation of concerns, harder scaling, and maintenance issues.
