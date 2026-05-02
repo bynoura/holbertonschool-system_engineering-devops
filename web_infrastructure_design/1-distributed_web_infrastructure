@@ -1,0 +1,68 @@
+1. Distributed Web Infrastructure
+
+User (Browser)
+     |
+     | HTTP/HTTPS request
+     v
+www.foobar.com
+     |
+     | DNS (A record → 8.8.8.8)
+     v
+Load Balancer (HAproxy)
+     | \
+     |  \
+     v   v
+Server 1                 Server 2
+(Nginx)                  (Nginx)
+(Application Server)    (Application Server)
+(Application Files)     (Application Files)
+(MySQL Primary)         (MySQL Replica)
+
+
+Explanation:
+
+What is a server?
+A server is a machine that provides services, resources, or data to other computers (clients) over a network.
+
+Why add a load balancer?
+To distribute traffic between multiple servers and improve performance, scalability, and availability.
+
+Why add multiple servers?
+To handle more traffic and ensure the system continues working if one server fails.
+
+Load Balancer Algorithm:
+The load balancer uses Round Robin algorithm, where requests are distributed sequentially between servers (Server 1 → Server 2 → repeat).
+
+Active-Active vs Active-Passive:
+This setup is Active-Active because both servers handle traffic at the same time.
+- Active-Active: all servers are working and sharing load.
+- Active-Passive: one server is active while the other is on standby.
+
+Database Primary-Replica:
+- Primary (Master): handles all write operations (INSERT, UPDATE, DELETE).
+- Replica (Slave): receives copies of data from the primary and handles read operations.
+
+Difference between Primary and Replica:
+- Primary: writable and responsible for data updates.
+- Replica: read-only and used for scaling read operations.
+
+What is the role of each component?
+- Web Server (Nginx): handles HTTP requests and serves static content.
+- Application Server: processes business logic and dynamic content.
+- Database (MySQL): stores and manages application data.
+
+How do servers communicate with users?
+Using HTTP/HTTPS over TCP/IP.
+
+Issues with this infrastructure:
+
+1. SPOF (Single Point of Failure):
+- Load balancer is a single point of failure.
+- Primary database is a single point of failure.
+
+2. Security issues:
+- No firewall protection.
+- No HTTPS encryption for secure communication.
+
+3. No monitoring:
+- No system to track performance or detect failures.
